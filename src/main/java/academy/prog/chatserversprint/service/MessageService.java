@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Base64;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -22,8 +23,17 @@ public class MessageService {
     @Transactional
     public void add(MessageDTO messageDTO) {
         var message = Message.fromDTO(messageDTO);
-        message.setFileData(Base64.getDecoder().decode(messageDTO.getFileData()));
+
+        if (messageDTO.getFileNames() != null && messageDTO.getFileDataList() != null
+                && messageDTO.getFileNames().size() == messageDTO.getFileDataList().size()) {
+            message.setFileDataList(messageDTO.getFileDataList());
+            message.setFileNames(messageDTO.getFileNames());
+        }
+
         message.setRecipients(messageDTO.getRecipients());
+        message.setOnlineStatus(true);
+        message.setLastActivity(new Date());
+
         messageRepository.save(message);
     }
 

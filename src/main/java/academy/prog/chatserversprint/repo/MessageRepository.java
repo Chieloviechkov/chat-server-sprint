@@ -11,5 +11,8 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
     //@Query("SELECT m FROM Message m WHERE m.id > :id AND m.to = :owner")
     @Query("SELECT m FROM Message m WHERE m.id > :id")
     List<Message> findNew(long id);
+    @Query("SELECT m FROM Message m WHERE m.onlineStatus = true")
+    List<Message> findActiveUsers();
+
 
 }

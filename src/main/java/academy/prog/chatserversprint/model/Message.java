@@ -35,8 +35,19 @@ public class Message {
 
     @Column(name = "file_data", columnDefinition = "BLOB")
     private byte[] fileData; // Base64(x) -> text
+    @Column(name = "online_status")
+    private boolean onlineStatus;
+    @Column(name = "last_activity")
+    private Date lastActivity;
     @ElementCollection
     private List<String> recipients;
+    @ElementCollection
+
+    private List<byte[]> fileDataList;
+
+    @ElementCollection
+    private List<String> fileNames;
+
     public static Message fromDTO(MessageDTO dto) {
         var result = new Message();
 
@@ -46,7 +57,11 @@ public class Message {
         result.setFrom(dto.getFrom());
         result.setText(dto.getText());
         result.setFileName(dto.getFileName());
-        result.setFileData(Base64.getDecoder().decode(dto.getFileData()));
+
+        if (dto.getFileData() != null) {
+            result.setFileData(Base64.getDecoder().decode(dto.getFileData()));
+        }
+
         return result;
     }
 
@@ -59,7 +74,10 @@ public class Message {
         result.setFrom(from);
         result.setText(text);
         result.setFileName(fileName);
-        result.setFileData(Base64.getEncoder().encodeToString(fileData).getBytes());
+
+        if (fileData != null) {
+            result.setFileData(Base64.getEncoder().encodeToString(fileData).getBytes());
+        }
 
         return result;
     }

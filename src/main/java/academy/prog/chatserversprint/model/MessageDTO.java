@@ -24,4 +24,9 @@ public class MessageDTO {
     private byte[] fileData;
 
     private List<String> recipients;
+
+
+    private List<String> fileNames;
+
+    private List<byte[]> fileDataList;
 }
